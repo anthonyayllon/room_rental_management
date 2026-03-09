@@ -1,0 +1,5 @@
+{
+  "name": "Admin & Finance Dashboard",
+  "description": "A dashboard for managing properties, tenants, and finances.",
+  "requestFramePermissions": []
+}
