@@ -9,20 +9,22 @@ import {
   Search,
   Filter,
   Calendar,
-  SortAsc,
+  ArrowUpDown,
   Key,
   Eye,
   Edit,
   LogOut,
   RefreshCw,
   ChevronDown,
-  Building
+  Building,
+  CreditCard
 } from 'lucide-react';
 import NewContract from './NewContract';
 import ContractPreview from './ContractPreview';
+import ContractPayments from './ContractPayments';
 
 export default function Contracts() {
-  const [view, setView] = useState<'list' | 'new' | 'preview'>('list');
+  const [view, setView] = useState<'list' | 'new' | 'preview' | 'payments'>('list');
   const [previousView, setPreviousView] = useState<'list' | 'new'>('list');
 
   if (view === 'new') {
@@ -46,8 +48,17 @@ export default function Contracts() {
     );
   }
 
+  if (view === 'payments') {
+    return (
+      <ContractPayments 
+        onBack={() => setView('list')} 
+      />
+    );
+  }
+
   return (
     <div className="flex-1 p-4 md:p-8 max-w-[1400px] mx-auto w-full flex flex-col gap-6 overflow-y-auto">
+      {/* Breadcrumbs */}
       <div className="flex items-center gap-2 text-sm">
         <a className="text-gray-500 dark:text-gray-400 hover:text-primary transition-colors" href="#">Inicio</a>
         <span className="text-gray-400 dark:text-gray-600">/</span>
@@ -56,28 +67,14 @@ export default function Contracts() {
         <span className="text-gray-900 dark:text-white font-medium">Contratos</span>
       </div>
 
+      {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div className="flex flex-col gap-1">
           <h1 className="text-3xl md:text-4xl font-black tracking-tight text-[#0d121b] dark:text-white">Administración Integral de Contratos</h1>
           <p className="text-gray-500 dark:text-gray-400 text-base">Administra los documentos, fechas y estados de los contratos vigentes.</p>
         </div>
         <div className="flex items-center gap-3">
-          <div className="relative group">
-            <select className="appearance-none h-11 pl-11 pr-10 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 rounded-lg font-bold text-sm transition-all hover:bg-gray-50 dark:hover:bg-gray-700 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none cursor-pointer">
-              <option value="all">Todas las propiedades</option>
-              <option value="1">Residencial Los Olivos</option>
-              <option value="2">Edificio Central Park</option>
-              <option value="3">Villas del Sol</option>
-              <option value="4">Apartamentos Mirador</option>
-            </select>
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
-              <Building size={20} />
-            </div>
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
-              <ChevronDown size={20} />
-            </div>
-          </div>
-          <button className="flex items-center justify-center gap-2 h-11 px-5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 rounded-lg font-bold text-sm transition-all hover:bg-gray-50 dark:hover:bg-gray-700">
+          <button className="flex items-center justify-center gap-2 h-11 px-5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 rounded-lg font-bold text-sm transition-all hover:bg-gray-50 dark:hover:bg-gray-700 shadow-sm">
             <Download size={20} />
             <span>Exportar CSV</span>
           </button>
@@ -91,6 +88,7 @@ export default function Contracts() {
         </div>
       </div>
 
+      {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white dark:bg-[#1e2532] p-5 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm transition-all hover:shadow-md">
           <div className="flex items-center gap-3">
@@ -99,7 +97,7 @@ export default function Contracts() {
             </div>
             <div>
               <p className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Total Contratos</p>
-              <h3 className="text-2xl font-black text-gray-900 dark:text-white" id="stat-total">124</h3>
+              <h3 className="text-2xl font-black text-gray-900 dark:text-white">124</h3>
             </div>
           </div>
         </div>
@@ -110,7 +108,7 @@ export default function Contracts() {
             </div>
             <div>
               <p className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Contratos Vigentes</p>
-              <h3 className="text-2xl font-black text-gray-900 dark:text-white" id="stat-vigentes">82</h3>
+              <h3 className="text-2xl font-black text-gray-900 dark:text-white">82</h3>
             </div>
           </div>
         </div>
@@ -121,7 +119,7 @@ export default function Contracts() {
             </div>
             <div>
               <p className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Por Vencer</p>
-              <h3 className="text-2xl font-black text-gray-900 dark:text-white" id="stat-por-vencer">12</h3>
+              <h3 className="text-2xl font-black text-gray-900 dark:text-white">12</h3>
             </div>
           </div>
         </div>
@@ -132,17 +130,23 @@ export default function Contracts() {
             </div>
             <div>
               <p className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Finalizados</p>
-              <h3 className="text-2xl font-black text-gray-900 dark:text-white" id="stat-finalizados">30</h3>
+              <h3 className="text-2xl font-black text-gray-900 dark:text-white">30</h3>
             </div>
           </div>
         </div>
       </div>
 
+      {/* Table Section */}
       <div className="bg-white dark:bg-[#1e2532] rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden flex flex-col flex-1 min-h-[500px]">
+        {/* Filters Bar */}
         <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex flex-col md:flex-row gap-4 items-center justify-between bg-gray-50/30 dark:bg-gray-800/20">
           <div className="w-full md:w-96 relative">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-            <input className="w-full h-11 pl-12 pr-4 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none" placeholder="Buscar por contrato, inquilino o ID..." type="text"/>
+            <input 
+              className="w-full h-11 pl-12 pr-4 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none" 
+              placeholder="Buscar por contrato, inquilino o ID..." 
+              type="text"
+            />
           </div>
           <div className="flex gap-3 w-full md:w-auto overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
             <button className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors whitespace-nowrap">
@@ -156,11 +160,13 @@ export default function Contracts() {
               <ChevronDown size={18} className="text-gray-400" />
             </button>
             <button className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors whitespace-nowrap">
-              <SortAsc size={18} className="text-gray-400" />
+              <ArrowUpDown size={18} className="text-gray-400" />
               <span>Ordenar</span>
             </button>
           </div>
         </div>
+
+        {/* Table */}
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
@@ -265,6 +271,13 @@ export default function Contracts() {
                   <td className="p-4 pr-6 text-right">
                     <div className="flex items-center justify-end gap-1">
                       <button 
+                        onClick={() => setView('payments')}
+                        className="size-8 flex items-center justify-center rounded-lg text-blue-500 hover:bg-blue-500/10 transition-colors" 
+                        title="Pagos"
+                      >
+                        <CreditCard size={20} />
+                      </button>
+                      <button 
                         onClick={() => {
                           setPreviousView('list');
                           setView('preview');
@@ -285,7 +298,7 @@ export default function Contracts() {
                         <LogOut size={20} />
                       </button>
                       {contract.status === 'Por Vencer' ? (
-                        <button className="size-8 flex items-center justify-center rounded-lg text-primary dark:text-blue-400 hover:bg-primary/10 transition-colors" title="Renovar Contrato">
+                        <button className="size-8 flex items-center justify-center rounded-lg text-green-600 dark:text-green-400 hover:bg-green-500/10 transition-colors" title="Renovar Contrato">
                           <RefreshCw size={20} />
                         </button>
                       ) : (
@@ -298,6 +311,8 @@ export default function Contracts() {
             </tbody>
           </table>
         </div>
+
+        {/* Pagination */}
         <div className="mt-auto border-t border-gray-200 dark:border-gray-700 p-4 flex flex-col sm:flex-row items-center justify-between gap-4 bg-gray-50/30 dark:bg-gray-800/20">
           <p className="text-sm text-gray-500 dark:text-gray-400">
             Mostrando <span className="font-bold text-gray-900 dark:text-white">1-5</span> de <span className="font-bold text-gray-900 dark:text-white">50</span> contratos
