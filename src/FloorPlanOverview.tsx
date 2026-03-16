@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
-  Search,
   Bell,
   ChevronRight,
   ChevronDown,
@@ -12,13 +11,10 @@ import {
   CheckCircle,
   Wrench,
   Layers,
-  X,
   Building2
 } from 'lucide-react';
 
 export default function FloorPlanOverview() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   return (
     <div className="flex flex-col h-full bg-background-light dark:bg-background-dark overflow-hidden">
       {/* Sub-header / Breadcrumb & Filters */}
@@ -27,13 +23,17 @@ export default function FloorPlanOverview() {
           <nav className="flex items-center text-sm font-medium">
             <button className="text-gray-500 hover:text-primary transition-colors">All Properties</button>
             <ChevronRight className="text-gray-400 mx-1" size={16} />
-            <button 
-              onClick={() => setIsModalOpen(true)}
-              className="flex items-center gap-1.5 cursor-pointer bg-primary/5 hover:bg-primary/10 text-primary px-3 py-1.5 rounded-lg border border-primary/10 transition-all"
-            >
-              <span className="font-bold">Building Alpha • Downtown Complex</span>
-              <ChevronDown size={16} />
-            </button>
+            <div className="relative flex items-center bg-primary/5 hover:bg-primary/10 text-primary px-3 py-1.5 rounded-lg border border-primary/10 transition-all focus-within:ring-2 focus-within:ring-primary/50">
+              <select
+                className="bg-transparent font-bold cursor-pointer outline-none min-w-[200px] sm:min-w-[200px] pr-2 text-sm"
+                defaultValue="alpha"
+              >
+                <option value="alpha">Building Alpha</option>
+                <option value="riverview">Riverview Residences</option>
+                <option value="skyline">Skyline Square</option>
+                <option value="harbor">Harbor Commons</option>
+              </select>
+            </div>
           </nav>
         </div>
         <div className="flex items-center gap-4">
@@ -203,71 +203,7 @@ export default function FloorPlanOverview() {
         </div>
       </main>
 
-      {/* Property Selection Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-          <div className="bg-white dark:bg-[#161e2d] w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[80vh] animate-in zoom-in-95 duration-200">
-            <div className="p-6 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center">
-              <h2 className="text-xl font-black text-gray-900 dark:text-white">Select Property</h2>
-              <button 
-                onClick={() => setIsModalOpen(false)}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full cursor-pointer transition-colors text-gray-500"
-              >
-                <X size={24} />
-              </button>
-            </div>
-            <div className="p-6 overflow-y-auto">
-              <div className="mb-6 relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-                <input 
-                  className="w-full bg-gray-50 dark:bg-[#1e293b] border-none rounded-xl pl-10 py-3 text-sm focus:ring-2 focus:ring-primary text-gray-900 dark:text-white" 
-                  placeholder="Filter by name, region or status..." 
-                  type="text"
-                />
-              </div>
-              <div className="space-y-3">
-                <div className="p-4 border-2 border-primary bg-primary/5 rounded-xl flex items-center gap-4 cursor-pointer">
-                  <div className="size-12 rounded-lg bg-primary/20 flex items-center justify-center text-primary font-bold">DT</div>
-                  <div className="flex-1">
-                    <p className="font-bold text-primary">Building Alpha • Downtown Complex</p>
-                    <p className="text-xs text-gray-500">124 Units • 6 Floors • New York, NY</p>
-                  </div>
-                  <CheckCircle className="text-primary" size={24} />
-                </div>
-                <div className="p-4 border border-gray-100 dark:border-gray-800 hover:border-primary/50 hover:bg-gray-50 dark:hover:bg-white/5 rounded-xl flex items-center gap-4 cursor-pointer transition-all">
-                  <div className="size-12 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 font-bold">RV</div>
-                  <div className="flex-1">
-                    <p className="font-bold text-gray-900 dark:text-white">Riverview Residences</p>
-                    <p className="text-xs text-gray-500">86 Units • 4 Floors • Jersey City, NJ</p>
-                  </div>
-                </div>
-                <div className="p-4 border border-gray-100 dark:border-gray-800 hover:border-primary/50 hover:bg-gray-50 dark:hover:bg-white/5 rounded-xl flex items-center gap-4 cursor-pointer transition-all">
-                  <div className="size-12 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 font-bold">SQ</div>
-                  <div className="flex-1">
-                    <p className="font-bold text-gray-900 dark:text-white">Skyline Square</p>
-                    <p className="text-xs text-gray-500">210 Units • 15 Floors • Chicago, IL</p>
-                  </div>
-                </div>
-                <div className="p-4 border border-gray-100 dark:border-gray-800 hover:border-primary/50 hover:bg-gray-50 dark:hover:bg-white/5 rounded-xl flex items-center gap-4 cursor-pointer transition-all">
-                  <div className="size-12 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 font-bold">HC</div>
-                  <div className="flex-1">
-                    <p className="font-bold text-gray-900 dark:text-white">Harbor Commons</p>
-                    <p className="text-xs text-gray-500">45 Units • 2 Floors • Boston, MA</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="p-4 bg-gray-50 dark:bg-[#1e293b] border-t border-gray-100 dark:border-gray-800 flex justify-end">
-              <button 
-                onClick={() => setIsModalOpen(false)}
-                className="bg-primary text-white font-bold px-6 py-2 rounded-lg cursor-pointer hover:bg-blue-700 transition-colors"
-              >
-                Confirm Selection
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+
     </div>
   );
 }

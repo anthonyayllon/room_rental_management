@@ -11,7 +11,8 @@ import {
   ChevronDown,
   ChevronRight,
   List,
-  LayoutGrid
+  LayoutGrid,
+  Bot
 } from 'lucide-react';
 import Dashboard from './Dashboard';
 import Tenants from './Tenants';
@@ -21,11 +22,11 @@ import FloorPlanOverview from './FloorPlanOverview';
 import RoomInventory from './RoomInventory';
 import RoomRegistration from './RoomRegistration';
 import OwnerInventory from './OwnerInventory';
-
 import ExpenseControl from './ExpenseControl';
+import GeminiTest from './GeminiTest';
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<'dashboard' | 'tenants' | 'contracts' | 'inventory' | 'floor-plan' | 'room-inventory' | 'room-registration' | 'owner-inventory' | 'expenses'>('contracts');
+  const [currentPage, setCurrentPage] = useState<'dashboard' | 'tenants' | 'contracts' | 'inventory' | 'floor-plan' | 'room-inventory' | 'room-registration' | 'owner-inventory' | 'expenses' | 'gemini'>('gemini');
   const [isPropertiesMenuOpen, setIsPropertiesMenuOpen] = useState(true);
 
   return (
@@ -171,6 +172,19 @@ export default function App() {
                 Finanzas
               </p>
             </button>
+            <button
+              onClick={() => setCurrentPage('gemini')}
+              className={`flex items-center gap-3 px-3 py-3 rounded-lg transition-colors group ${
+                currentPage === 'gemini'
+                  ? 'bg-primary text-white'
+                  : 'hover:bg-[#e7ebf3] dark:hover:bg-[#2b3547]'
+              }`}
+            >
+              <Bot size={24} className={currentPage === 'gemini' ? '' : 'text-[#4c669a] dark:text-gray-400 group-hover:text-primary transition-colors'} />
+              <p className={`text-sm font-medium leading-normal ${currentPage === 'gemini' ? 'font-semibold' : 'text-[#0d121b] dark:text-gray-300'}`}>
+                Asistente AI
+              </p>
+            </button>
           </nav>
         </div>
         <div className="flex flex-col gap-2">
@@ -207,6 +221,7 @@ export default function App() {
          currentPage === 'room-registration' ? <RoomRegistration onNavigate={setCurrentPage} onDiscard={() => setCurrentPage('room-inventory')} /> :
          currentPage === 'owner-inventory' ? <OwnerInventory /> :
          currentPage === 'expenses' ? <ExpenseControl /> :
+         currentPage === 'gemini' ? <GeminiTest /> :
          <Contracts />}
       </div>
     </div>
